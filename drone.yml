@@ -1,0 +1,37 @@
+# This is the template file used for generating the final .drone.yml
+# Remember to run python render.py after making edits here
+pipeline:
+  lint:
+    image: alpine:3.7
+    commands:
+      - apk add --no-cache curl
+      - curl -sL -o /usr/bin/hadolint "https://github.com/hadolint/hadolint/releases/download/v$HADOLINT_VERSION/hadolint-Linux-x86_64"
+      - chmod 700 /usr/bin/hadolint
+      - hadolint *.Dockerfile
+      - echo "Making sure branch name doesn't contain a slash"
+      - echo $DRONE_COMMIT_BRANCH | grep -v "/"
+    environment:
+      HADOLINT_VERSION: 1.6.5
+    when:
+      event: push
+  # This step runs on both push and deploy
+  00-generate-dockerfiles:
+    image: python:3.6.5-alpine3.7
+    commands:
+      - pip install -r requirements.txt
+      - python render.py "docker"
+  # This step is required because the generated Dockerfiles by default
+  # refer to FROM captn3m0/drone-meta-ci-docker-build:{tag} which won't be the build in
+  # the current branch (so pushes will be correct - see step.yml)
+  # but pulls will be incorrect. To generate the right pushtag, we run this
+  01-fix-dockerfiles-non-master:
+    image: alpine:3.7
+    commands:
+      # Uses pipe as delimeter
+      - echo $DRONE_COMMIT_BRANCH
+      - sed -i "s|captn3m0/drone-meta-ci-docker-build:|captn3m0/drone-meta-ci-docker-build:$DRONE_COMMIT_BRANCH|" *.Dockerfile
+    when:
+      branch:
+        exclude: master
+      event: deployment
+      status: success

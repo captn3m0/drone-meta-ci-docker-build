@@ -7,7 +7,8 @@ pipeline:
   01-fix-dockerfiles-non-master:
     commands:
     - echo $DRONE_COMMIT_BRANCH
-    - sed -i "s|razorpay/onggi:|razorpay/onggi:$DRONE_COMMIT_BRANCH|" *.Dockerfile
+    - sed -i "s|captn3m0/drone-meta-ci-docker-build:|captn3m0/drone-meta-ci-docker-build:$DRONE_COMMIT_BRANCH|"
+      *.Dockerfile
     image: alpine:3.7
     when:
       branch:
@@ -17,7 +18,7 @@ pipeline:
   base-3.5:
     dockerfile: base-3.5.Dockerfile
     image: plugins/docker
-    repo: razorpay/onggi
+    repo: captn3m0/drone-meta-ci-docker-build
     secrets:
     - DOCKER_USERNAME
     - DOCKER_PASSWORD
@@ -30,7 +31,7 @@ pipeline:
   base-3.6:
     dockerfile: base-3.6.Dockerfile
     image: plugins/docker
-    repo: razorpay/onggi
+    repo: captn3m0/drone-meta-ci-docker-build
     secrets:
     - DOCKER_USERNAME
     - DOCKER_PASSWORD
@@ -38,14 +39,12 @@ pipeline:
     when:
       environment:
       - base-3.6
-      - php-7.1
-      - php-7.1-nginx
       event: deployment
       status: success
   base-3.7:
     dockerfile: base-3.7.Dockerfile
     image: plugins/docker
-    repo: razorpay/onggi
+    repo: captn3m0/drone-meta-ci-docker-build
     secrets:
     - DOCKER_USERNAME
     - DOCKER_PASSWORD
@@ -53,69 +52,7 @@ pipeline:
     when:
       environment:
       - base-3.7
-      - golang-1.9
-      - golang-1.9-nginx
-      - libressl-nginx
-      - nginx
-      - nginx-brotli
       - python-3.6
-      - python-3.6-libressl-nginx
-      - python-3.6-ml-nginx
-      - python-ml-nginx
-      event: deployment
-      status: success
-  base-java8:
-    dockerfile: base-java8.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}base-java8
-    when:
-      environment:
-      - base-java8
-      event: deployment
-      status: success
-  golang-1.9:
-    dockerfile: golang-1.9.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}golang-1.9
-    when:
-      environment:
-      - golang-1.9
-      - golang-1.9-nginx
-      event: deployment
-      status: success
-  golang-1.9-nginx:
-    dockerfile: golang-1.9-nginx.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}golang-1.9-nginx
-    when:
-      environment:
-      - golang-1.9-nginx
-      event: deployment
-      status: success
-  libressl-nginx:
-    dockerfile: libressl-nginx.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}libressl-nginx
-    when:
-      environment:
-      - libressl-nginx
-      - python-ml-nginx
       event: deployment
       status: success
   lint:
@@ -131,63 +68,10 @@ pipeline:
     image: alpine:3.7
     when:
       event: push
-  nginx:
-    dockerfile: nginx.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}nginx
-    when:
-      environment:
-      - nginx
-      event: deployment
-      status: success
-  nginx-brotli:
-    dockerfile: nginx-brotli.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}nginx-brotli
-    when:
-      environment:
-      - nginx-brotli
-      event: deployment
-      status: success
-  php-7.1:
-    dockerfile: php-7.1.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}php-7.1
-    when:
-      environment:
-      - php-7.1
-      - php-7.1-nginx
-      event: deployment
-      status: success
-  php-7.1-nginx:
-    dockerfile: php-7.1-nginx.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}php-7.1-nginx
-    when:
-      environment:
-      - php-7.1-nginx
-      event: deployment
-      status: success
   python-3.6:
     dockerfile: python-3.6.Dockerfile
     image: plugins/docker
-    repo: razorpay/onggi
+    repo: captn3m0/drone-meta-ci-docker-build
     secrets:
     - DOCKER_USERNAME
     - DOCKER_PASSWORD
@@ -195,60 +79,5 @@ pipeline:
     when:
       environment:
       - python-3.6
-      - python-3.6-libressl-nginx
-      - python-3.6-ml-nginx
-      event: deployment
-      status: success
-  python-3.6-libressl-nginx:
-    dockerfile: python-3.6-libressl-nginx.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}python-3.6-libressl-nginx
-    when:
-      environment:
-      - python-3.6-libressl-nginx
-      - python-3.6-ml-nginx
-      event: deployment
-      status: success
-  python-3.6-ml-nginx:
-    dockerfile: python-3.6-ml-nginx.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}python-3.6-ml-nginx
-    when:
-      environment:
-      - python-3.6-ml-nginx
-      event: deployment
-      status: success
-  python-ml-nginx:
-    dockerfile: python-ml-nginx.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}python-ml-nginx
-    when:
-      environment:
-      - python-ml-nginx
-      event: deployment
-      status: success
-  static-proxy:
-    dockerfile: static-proxy.Dockerfile
-    image: plugins/docker
-    repo: razorpay/onggi
-    secrets:
-    - DOCKER_USERNAME
-    - DOCKER_PASSWORD
-    tags: ${DRONE_COMMIT_BRANCH##master}static-proxy
-    when:
-      environment:
-      - static-proxy
       event: deployment
       status: success
