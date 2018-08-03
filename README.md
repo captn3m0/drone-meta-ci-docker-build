@@ -1,5 +1,7 @@
 # drone-meta-ci-docker-build
 
+Slides: https://www.beautiful.ai/deck/-LIwt5HIoi-jxvnzkZTO/Building-Docker-Images-at-Scale-with-Drone
+
 # What does it do?
 
 drone-meta-ci-docker-build saves time by automating the slow and boring part of waiting
