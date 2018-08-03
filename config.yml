@@ -1,0 +1,17 @@
+images:
+  base-3.7:
+    base: alpine:3.7
+    roles:
+      - base
+  base-3.6:
+    base: alpine:3.6
+    roles:
+      - base
+  base-3.5:
+    base: alpine:3.5
+    roles:
+      - base
+  python-3.6:
+    base: base-3.7
+    roles:
+      - python3.6

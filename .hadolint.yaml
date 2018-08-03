@@ -1,0 +1,9 @@
+ignored:
+  # We install both curl and wget for now
+  - DL4001
+  # We don't pin package versions in apk
+  - DL3018
+  # Or in apt-get
+  - DL3008
+  # Or in pip (we run a pip upgrade self)
+  - DL3013

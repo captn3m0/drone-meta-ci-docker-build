@@ -1,0 +1,11 @@
+image: plugins/docker
+repo: captn3m0/drone-meta-ci-docker-build
+secrets: [DOCKER_USERNAME, DOCKER_PASSWORD]
+# environment:
+# # Makes sure that the docker volume cache survives this run
+#   PLUGIN_STORAGE_PATH: /drone/src/github.com/captn3m0/drone-meta-ci-docker-build/docker_cache
+tags: ""
+when:
+  event: "deployment"
+  environment: []
+  status: success
